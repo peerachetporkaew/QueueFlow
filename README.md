@@ -60,6 +60,9 @@ if __name__ == "__main__":
 
 ## Advanced Example
 
+
+This example shows the usage of the ``multiple_inputs_step`` decorator to hold execution until all inputs are ready.
+
 ```python
 from queueflow.queueflow import QueueFlow, multiple_inputs_step
 from llfn import LLFn
@@ -90,16 +93,16 @@ class MyFlow1(QueueFlow):
 
     def translate_to_thai(self,data):
         out = translate("HELLO, how are you ?","Thai")
-        self.next(self.append, out)
+        self.next(self.append, out) # This `out` is str.
 
-    def translate_to_chinese(self,data):
+    def translate_to_chinese(self,data): 
         out = translate("HELLO, how are you ?","Chinese")
-        self.next(self.append, out)
+        self.next(self.append, out) # This `out` is also str.
 
 
     @multiple_inputs_step(num_inputs=2)
     def append(self,data):
-        out = " ||| ".join(data)
+        out = " ||| ".join(data) # data now is a list of str.
         self.next(self.end, out)
 
 if __name__ == "__main__":
@@ -109,5 +112,5 @@ if __name__ == "__main__":
     
     out = myflow.output["result"]
 
-    print(out)
+    print(out) # สวัสดี คุณสบายดีไหม ? ||| 你好，你好吗？
 ```
