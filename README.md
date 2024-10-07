@@ -2,3 +2,12 @@
 Example of execution flow implementation using deque
 
 You can extend with LLM by using LLFn [https://github.com/orgexyz/LLFn]
+
+
+```
+
+cd queueflow
+poetry install
+poetry run python main.py
+
+```

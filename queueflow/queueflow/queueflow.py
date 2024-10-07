@@ -2,11 +2,12 @@ from collections import deque
 
 class QueueFlow:
     
-    def __init__(self,datax):
+    def __init__(self,datax=""):
         self.data = datax
         self.queue = deque()
         self.buffer = {}
         self.END = False
+        self.output = {}
 
     def start(self):
         print(self.data)
@@ -34,6 +35,7 @@ class QueueFlow:
 
     def end(self, message):
         self.END = True 
+        self.output["result"] = message
         print(f"Flow is done! Message: {message}")
 
     # The next method encapsulates the lambda creation
