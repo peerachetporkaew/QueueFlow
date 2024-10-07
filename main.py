@@ -1,11 +1,9 @@
 from collections import deque
 
-data_source = "ABCDEF"
-
 class QueueFlow:
-    data = data_source
-
-    def __init__(self):
+    
+    def __init__(self,datax):
+        self.data = datax
         self.queue = deque()
         self.buffer = {}
         self.END = False
@@ -53,9 +51,7 @@ class QueueFlow:
 
 if __name__ == "__main__":
     
-    
-    data_source = "HELLO WORLD"
-    flow = QueueFlow()
+    flow = QueueFlow("HELLO WORLD")
     flow.run()
 
     print(flow.END)
