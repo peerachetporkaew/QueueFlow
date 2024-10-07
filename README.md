@@ -43,7 +43,7 @@ class MyFlow1(QueueFlow):
 
     def start(self):
         data = self.DATA["input"]
-        out = translate(data)
+        out = translate(data, "Thai")
         self.next(self.end, out)
 
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     
     out = myflow.output["result"]
 
-    print(out)
+    print(out) # สวัสดี คุณสบายดีไหม ?
 ```
 
 ## Advanced Example
