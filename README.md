@@ -42,8 +42,8 @@ class MyFlow1(QueueFlow):
 
 
     def start(self):
-        out = self.DATA["input"]
-        out = translate("HELLO, how are you ?","Thai")
+        data = self.DATA["input"]
+        out = translate(data)
         self.next(self.end, out)
 
 
