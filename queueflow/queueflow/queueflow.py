@@ -1,7 +1,7 @@
 from collections import deque
 from functools import wraps
 
-def multiple_inputs_step(num_inputs=2):
+def multiple_input_step(num_input=2):
     """Decorator to collect 'input' number of data points before proceeding"""
     
     def decorator(func):
@@ -18,8 +18,8 @@ def multiple_inputs_step(num_inputs=2):
             self.buffer[func_name].append(data)
             
             # If we don't have enough inputs yet, return and wait
-            if len(self.buffer[func_name]) < num_inputs:
-                return f"Waiting for {num_inputs - len(self.buffer[func_name])} more inputs..."
+            if len(self.buffer[func_name]) < num_input:
+                return f"Waiting for {num_input - len(self.buffer[func_name])} more inputs..."
             
             # Otherwise, we have enough inputs, call the original method
             result = func(self, self.buffer[func_name], *args, **kwargs)

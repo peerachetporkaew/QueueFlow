@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 
 
 
-from queueflow.queueflow import QueueFlow, multiple_inputs_step
+from queueflow.queueflow import QueueFlow, multiple_input_step
 from llfn import LLFn
 
 function_prompt = LLFn()
@@ -48,7 +48,7 @@ class MyFlow1(QueueFlow):
         self.next(self.append, out)
 
 
-    @multiple_inputs_step(num_inputs=2)
+    @multiple_input_step(num_input=2)
     def append(self,data):
         out = " ||| ".join(data)
         self.next(self.end, out)

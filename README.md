@@ -61,10 +61,10 @@ if __name__ == "__main__":
 ## Advanced Example
 
 
-This example shows the usage of the ``multiple_inputs_step`` decorator to hold execution until all inputs are ready.
+This example shows the usage of the ``multiple_input_step`` decorator to hold execution until all inputs are ready.
 
 ```python
-from queueflow.queueflow import QueueFlow, multiple_inputs_step
+from queueflow.queueflow import QueueFlow, multiple_input_step
 from llfn import LLFn
 
 function_prompt = LLFn()
@@ -100,7 +100,7 @@ class MyFlow1(QueueFlow):
         self.next(self.append, out) # This `out` is also str.
 
 
-    @multiple_inputs_step(num_inputs=2)
+    @multiple_input_step(num_input=2)
     def append(self,data):
         out = " ||| ".join(data) # data now is a list of str.
         self.next(self.end, out)
