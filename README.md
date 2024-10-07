@@ -4,6 +4,8 @@ Example of execution flow implementation using deque
 You can extend with LLM by using LLFn [https://github.com/orgexyz/LLFn]
 
 
+python = 3.10 with poetry installed
+
 ```
 
 cd queueflow
