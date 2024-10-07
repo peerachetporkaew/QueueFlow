@@ -92,11 +92,11 @@ class MyFlow1(QueueFlow):
         self.next(self.translate_to_chinese, out)
 
     def translate_to_thai(self,data):
-        out = translate(data)
+        out = translate(data,"Thai")
         self.next(self.append, out) # This `out` is str.
 
     def translate_to_chinese(self,data): 
-        out = translate(data)
+        out = translate(data,"Chinese")
         self.next(self.append, out) # This `out` is also str.
 
 
