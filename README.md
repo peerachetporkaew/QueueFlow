@@ -14,7 +14,7 @@ poetry run python main.py
 
 ## Basic Example 
 
-```
+```python
 from queueflow.queueflow import QueueFlow
 from llfn import LLFn
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
 ## Advanced Example
 
-```
+```python
 from queueflow.queueflow import QueueFlow, multiple_inputs_step
 from llfn import LLFn
 
