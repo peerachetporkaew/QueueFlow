@@ -1,4 +1,37 @@
 from collections import deque
+from functools import wraps
+
+def multiple_inputs_step(num_inputs=2):
+    """Decorator to collect 'input' number of data points before proceeding"""
+    
+    def decorator(func):
+        @wraps(func)
+        def wrapper(self, data, *args, **kwargs):
+            # Use the function's name as the buffer key
+            func_name = func.__name__
+            
+            # Initialize the buffer if it does not exist for this function name
+            if func_name not in self.buffer:
+                self.buffer[func_name] = []
+
+            # Append the new data to the buffer
+            self.buffer[func_name].append(data)
+            
+            # If we don't have enough inputs yet, return and wait
+            if len(self.buffer[func_name]) < num_inputs:
+                return f"Waiting for {num_inputs - len(self.buffer[func_name])} more inputs..."
+            
+            # Otherwise, we have enough inputs, call the original method
+            result = func(self, self.buffer[func_name], *args, **kwargs)
+            
+            # Reset the buffer after processing
+            self.buffer[func_name] = []
+            
+            return result
+        return wrapper
+    return decorator
+
+
 
 class QueueFlow:
     
@@ -36,7 +69,7 @@ class QueueFlow:
     def end(self, message):
         self.END = True 
         self.output["result"] = message
-        print(f"Flow is done! Message: {message}")
+        #print(f"Flow is done! Message: {message}")
 
     # The next method encapsulates the lambda creation
     def next(self, step_function, *args):

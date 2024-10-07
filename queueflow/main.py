@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 
 
 
-from queueflow.queueflow import QueueFlow
+from queueflow.queueflow import QueueFlow, multiple_inputs_step
 from llfn import LLFn
 
 function_prompt = LLFn()
@@ -28,20 +28,30 @@ llm = ChatOpenAI(temperature=0.7, openai_api_key=os.getenv('OPENAI_API_KEY'))
 translate.bind(llm)
 
 
-
 class MyFlow1(QueueFlow):
 
     def __init__(self, datax={}):
         super().__init__("TEMP")
         self.DATA = datax
 
-
     def start(self):
         out = self.DATA["input"]
+        self.next(self.translate_to_thai, out)
+        self.next(self.translate_to_chinese, out)
+
+    def translate_to_thai(self,data):
         out = translate("HELLO, how are you ?","Thai")
+        self.next(self.append, out)
+
+    def translate_to_chinese(self,data):
+        out = translate("HELLO, how are you ?","Chinese")
+        self.next(self.append, out)
+
+
+    @multiple_inputs_step(num_inputs=2)
+    def append(self,data):
+        out = " ||| ".join(data)
         self.next(self.end, out)
-
-
 
 if __name__ == "__main__":
 
