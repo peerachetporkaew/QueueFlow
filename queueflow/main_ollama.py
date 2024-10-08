@@ -71,6 +71,9 @@ def translatetemp(data,lang):
     return lang + " :: " + data
 
 
+"""
+Objective : Get character data and translate to Chinese.
+"""
 class MyFlow1(QueueFlow):
 
     def __init__(self, datax={}):
