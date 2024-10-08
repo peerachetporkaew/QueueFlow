@@ -111,7 +111,9 @@ class MyFlow1(QueueFlow):
         out = data[0]
         out.update(data[1])
         out.update(data[2])
-        self.next(self.end, out)
+
+        character = Character(name=out["name"], age=out["age"], fact=out["fact"])
+        self.next(self.end, character)
 
 if __name__ == "__main__":
 
