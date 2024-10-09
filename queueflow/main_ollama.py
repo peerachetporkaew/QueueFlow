@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 
 
 
-from queueflow.queueflow import QueueFlow, multiple_input_step
+from queueflow.queueflow import QueueFlow, multiple_input_step, time_limit
 
 from openai import OpenAI
 from pydantic import BaseModel, Field
@@ -84,7 +84,7 @@ class MyFlow1(QueueFlow):
         out = self.DATA["input"]
         self.next(self.get_character_details, out)
         
-
+    @time_limit(10)
     def get_character_details(self,data):
         print("STEP :: Get Charater Details")
         out = get_character_details(data)
@@ -93,7 +93,7 @@ class MyFlow1(QueueFlow):
         self.next(self.translate_to_chinese, out.fact)
         self.next(self.merge, {"age" : out.age})
 
-
+    @time_limit(10)
     def translate_to_chinese(self,data):
         print("STEP :: Translate to Chinese", data)
         if isinstance(data,str):
@@ -122,5 +122,10 @@ if __name__ == "__main__":
 
     myflow = MyFlow1({"input" : "Tom Hank"})
     myflow.run()
-    out = myflow.output["result"]
+
+    if myflow.SUCCESS:
+        out = myflow.output["result"]
+    else:
+        out = myflow.output["error_message"]
+
     print(out)
