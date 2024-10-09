@@ -1,5 +1,30 @@
 from collections import deque
 from functools import wraps
+import signal
+
+
+class TimeoutException(Exception):
+    pass
+
+def time_limit(seconds):
+    def decorator(func):
+        def _handle_timeout(signum, frame):
+            raise TimeoutException(f"Function timed out after {seconds} seconds")
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Set the signal handler and alarm
+            signal.signal(signal.SIGALRM, _handle_timeout)
+            signal.alarm(seconds)
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                # Disable the alarm after the function execution
+                signal.alarm(0)
+            return result
+        return wrapper
+    return decorator
+
 
 def multiple_input_step(num_input=2):
     """Decorator to collect 'input' number of data points before proceeding"""
@@ -66,9 +91,14 @@ class QueueFlow:
             out = "COMPARE : ", " ||| ".join(self.buffer["compare"])
             self.next(self.end, out)
 
-    def end(self, message):
-        self.END = True 
-        self.output["result"] = message
+    def end(self, message , success=True):
+        self.END = success
+        self.SUCCESS = success
+        if self.END:
+            self.output["result"] = message
+        else:
+            self.output["result"] = ""
+            self.output["error_message"] = message
         #print(f"Flow is done! Message: {message}")
 
     # The next method encapsulates the lambda creation
@@ -82,7 +112,13 @@ class QueueFlow:
         # Process the queue
         while self.queue:
             next_step = self.queue.popleft()
-            next_step()
+            try:
+                next_step()
+            except TimeoutException as e:
+                self.end("TimeOut Exception", success=False)
+            except Exception as e:
+                print(f"An unexpected exception occurred: {e}")
+                
 
 if __name__ == "__main__":
     

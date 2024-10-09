@@ -10,9 +10,10 @@ import warnings
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 
+import time 
 
 
-from queueflow.queueflow import QueueFlow, multiple_input_step
+from queueflow.queueflow import QueueFlow, multiple_input_step, time_limit
 from llfn import LLFn
 
 function_prompt = LLFn()
@@ -39,10 +40,12 @@ class MyFlow1(QueueFlow):
         self.next(self.translate_to_thai, out)
         self.next(self.translate_to_chinese, out)
 
+    @time_limit(10)
     def translate_to_thai(self,data):
         out = translate(data,"Thai")
         self.next(self.append, out)
 
+    @time_limit(10)
     def translate_to_chinese(self,data):
         out = translate(data,"Chinese")
         self.next(self.append, out)
@@ -58,6 +61,9 @@ if __name__ == "__main__":
     myflow = MyFlow1({"input" : "Hello, How are you ?"})
     myflow.run()
     
-    out = myflow.output["result"]
+    if myflow.SUCCESS:
+        out = myflow.output["result"]
+    else:
+        out = myflow.output["error_message"]
 
     print(out)
