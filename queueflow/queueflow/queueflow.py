@@ -65,6 +65,7 @@ class QueueFlow:
         self.queue = deque()
         self.buffer = {}
         self.END = False
+        self.SUCCESS = False
         self.output = {}
 
     def start(self):
